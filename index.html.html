@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مینیویا دیجیتالی - Online Menu</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-color: #f59e0b;
+            --secondary-color: #38bdf8;
+            --price-color: #4ade80;
+            --border-color: #334155;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 15px;
+        }
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            overflow: hidden;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 15px 0 20px 0;
+            border-bottom: 2px solid var(--border-color);
+            position: relative;
+        }
+        header h1 {
+            color: var(--accent-color);
+            font-size: 26px;
+            margin-bottom: 5px;
+        }
+        header p {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        
+        .admin-toggle-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .admin-toggle-btn:hover { background: #2563eb; }
+
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 15px 0;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+        .category-tabs::-webkit-scrollbar { display: none; }
+        
+        .tab-btn {
+            background: #334155;
+            color: #cbd5e1;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.3s;
+        }
+        .tab-btn.active, .tab-btn:hover {
+            background: var(--accent-color);
+            color: #0f172a;
+            font-weight: bold;
+        }
+
+        .menu-section {
+            margin-top: 15px;
+        }
+        .section-title {
+            font-size: 18px;
+            color: var(--secondary-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            margin: 20px 0 12px 0;
+        }
+        .menu-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            background: #273549;
+            padding: 12px 15px;
+            border-radius: 12px;
+            gap: 15px;
+            transition: 0.2s;
+        }
+        .menu-item:hover {
+            background: #2d3e56;
+        }
+        .item-image {
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #111827;
+        }
+        .item-info {
+            flex-grow: 1;
+        }
+        .item-info h3 {
+            font-size: 16px;
+            color: #ffffff;
+            margin-bottom: 3px;
+        }
+        .item-info p {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+        .item-price-action {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+        .item-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--price-color);
+        }
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 10px;
+            display: none;
+        }
+        .delete-btn:hover { background: #dc2626; }
+
+        .admin-panel {
+            margin-top: 25px;
+            background: #111827;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px dashed #4b5563;
+            display: none;
+        }
+        .admin-panel h3 {
+            color: var(--accent-color);
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: #9ca3af;
+            margin-bottom: 4px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px 10px;
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 6px;
+            color: white;
+            font-size: 13px;
+        }
+        .action-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .action-btn:hover { background: #059669; }
+
+        .login-box {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 12px;
+            color: #64748b;
+            font-size: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <button class="admin-toggle-btn" onclick="toggleAdminPanel()">🔒 بەشێ رێڤەبەری</button>
+            <h1>کافە و ڕێستۆرانا مۆدێرن</h1>
+            <p>مینیویا دیجیتالی ب وێنە - هەمیشە یا تازەیە</p>
+        </header>
+
+        <div class="category-tabs">
+            <button class="tab-btn active" onclick="filterCategory('all', event)">هەمی</button>
+            <button class="tab-btn" onclick="filterCategory('drinks', event)">☕ ڤەخوارن</button>
+            <button class="tab-btn" onclick="filterCategory('mains', event)">🍲 خوارنێن سەرەکی</button>
+            <button class="tab-btn" onclick="filterCategory('desserts', event)">🍰 شیرینی</button>
+        </div>
+
+        <div id="menuContainer" class="menu-section"></div>
+
+        <div class="admin-panel" id="adminPanel">
+            <h3>⚙️ دەستکاری و زێدەکرنا خارنان ب وێنە</h3>
+            
+            <div id="loginSection">
+                <p style="font-size: 12px; color: #9ca3af; margin-bottom: 8px;">بۆ ڤکرنا بەشێ دەستکاریێ، نهێنۆکێ بنڤیسە (نهێنۆک: 1234):</p>
+                <div class="login-box">
+                    <input type="password" id="adminPassword" placeholder="نهێنۆک (Password)">
+                    <button class="action-btn" style="margin-top:0; width: 100px;" onclick="checkPassword()">ڤەکە</button>
+                </div>
+            </div>
+
+            <div id="editorContent" style="display: none;">
+                <div class="form-group">
+                    <label>بەشێ مینیویێ:</label>
+                    <select id="newItemCategory">
+                        <option value="drinks">☕ ڤەخوارن (Drinks)</option>
+                        <option value="mains">🍲 خوارنێن سەرەکی (Main Dishes)</option>
+                        <option value="desserts">🍰 شیرینی (Desserts)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>ناڤێ خارنێ یان ڤەخوارنێ:</label>
+                    <input type="text" id="newItemName" placeholder="بۆ نموونە: پیتزا تایبەت">
+                </div>
+                <div class="form-group">
+                    <label>پێکهاتە یا پێناسە (Description):</label>
+                    <input type="text" id="newItemDesc" placeholder="بۆ نموونە: پەنیری مۆزەرێلا، گوشت">
+                </div>
+                <div class="form-group">
+                    <label>نرخ (Price):</label>
+                    <input type="text" id="newItemPrice" placeholder="بۆ نموونە: 6,000 د.ع">
+                </div>
+                <div class="form-group">
+                    <label>لینکێ وێنەی (Image URL):</label>
+                    <input type="text" id="newItemImage" placeholder="لینکێ وێنەی ل سەر ئینتەرنێتێ دابنێ">
+                </div>
+                <button class="action-btn" onclick="addNewItem()">➕ زێدەکرن بۆ مینیویێ</button>
+                <button class="action-btn" style="background:#4b5563; margin-top:8px;" onclick="lockAdminPanel()">🔒 داخستنا دەستکاریێ</button>
+            </div>
+        </div>
+
+        <footer>
+            <p>دروستکرییە ب شێوازێ دیجیتالی بۆ کارێن سەرکەفتی</p>
+        </footer>
+    </div>
+
+    <script>
+        let menuData = JSON.parse(localStorage.getItem('restaurantMenuWithImages')) || [
+            { id: 1, category: 'drinks', name: 'چایێ ڕەش', desc: 'چایێ گەرم و تەزا', price: '500 د.ع', image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=150' },
+            { id: 2, category: 'drinks', name: 'قاوەیا تورکی', desc: 'ب قایماق و تامەکا خۆش', price: '1,500 د.ع', image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=150' },
+            { id: 3, category: 'mains', name: 'کفتە و سەمون', desc: 'ب ترش و زەڵاتا تازە', price: '4,000 د.ع', image: 'https://images.unsplash.com/photo-1529042410759-befb1204b468?w=150' },
+            { id: 4, category: 'mains', name: 'تیکە و مەتەڵ', desc: 'گۆشتێ تازە یێ مەڕێ', price: '9,000 د.ع', image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=150' },
+            { id: 5, category: 'desserts', name: 'کنافتە ب پەنیری', desc: 'گورم و شیرین ب فستق', price: '4,000 د.ع', image: 'https://images.unsplash.com/photo-1587314168485-3236d6710814?w=150' }
+        ];
+
+        let currentFilter = 'all';
+        let isAdminLoggedIn = false;
+
+        function renderMenu() {
+            const container = document.getElementById('menuContainer');
+            container.innerHTML = '';
+
+            const categories = [
+                { key: 'drinks', title: '☕ ڤەخوارن (Drinks)' },
+                { key: 'mains', title: '🍲 خوارنێن سەرەکی (Main Dishes)' },
+                { key: 'desserts', title: '🍰 شیرینی (Desserts)' }
+            ];
+
+            categories.forEach(cat => {
+                if (currentFilter !== 'all' && currentFilter !== cat.key) return;
+
+                const items = menuData.filter(item => item.category === cat.key);
+                if (items.length === 0 && currentFilter !== 'all') return;
+
+                let sectionHTML = `
+                    <div class="section-title">${cat.title}</div>
+                    <div class="menu-grid">
+                `;
+
+                items.forEach(item => {
+                    const imgSrc = item.image && item.image.trim() !== '' ? item.image : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=150';
+                    sectionHTML += `
+                        <div class="menu-item">
+                            <img src="${imgSrc}" alt="${item.name}" class="item-image" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=150'">
+                            <div class="item-info">
+                                <h3>${item.name}</h3>
+                                <p>${item.desc}</p>
+                            </div>
+                            <div class="item-price-action">
+                                <div class="item-price">${item.price}</div>
+                                <button class="delete-btn" id="del-${item.id}" style="display: ${isAdminLoggedIn ? 'block' : 'none'};" onclick="deleteItem(${item.id})">ژێبرن</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                sectionHTML += `</div>`;
+                container.innerHTML += sectionHTML;
+            });
+        }
+
+        function filterCategory(catKey, event) {
+            currentFilter = catKey;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderMenu();
+        }
+
+        function toggleAdminPanel() {
+            const panel = document.getElementById('adminPanel');
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function checkPassword() {
+            const pass = document.getElementById('adminPassword').value;
+            if (pass === '1234') {
+                isAdminLoggedIn = true;
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('editorContent').style.display = 'block';
+                renderMenu();
+                alert('ب سەرکەفتیانە چویە ژووردا!');
+            } else {
+                alert('نهێنۆک شاشە! (نهێنۆک: 1234)');
+            }
+        }
+
+        function lockAdminPanel() {
+            isAdminLoggedIn = false;
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('editorContent').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'none';
+            renderMenu();
+        }
+
+        function addNewItem() {
+            const category = document.getElementById('newItemCategory').value;
+            const name = document.getElementById('newItemName').value;
+            const desc = document.getElementById('newItemDesc').value;
+            const price = document.getElementById('newItemPrice').value;
+            const image = document.getElementById('newItemImage').value;
+
+            if (!name || !price) {
+                alert('لطفا ناڤێ خارنێ و نرخێ وێ بنڤیسە!');
+                return;
+            }
+
+            const newItem = {
+                id: Date.now(),
+                category,
+                name,
+                desc,
+                price,
+                image
+            };
+
+            menuData.push(newItem);
+            localStorage.setItem('restaurantMenuWithImages', JSON.stringify(menuData));
+
+            document.getElementById('newItemName').value = '';
+            document.getElementById('newItemDesc').value = '';
+            document.getElementById('newItemPrice').value = '';
+            document.getElementById('newItemImage').value = '';
+
+            renderMenu();
+            alert('خارنا نوو ب وێنە ڤە ب سەرکەفتیانە هاتە زێدەکرن!');
+        }
+
+        function deleteItem(id) {
+            if (confirm('تە دڤێت ئەڤ خارنە ژێ ببەی؟')) {
+                menuData = menuData.filter(item => item.id !== id);
+                localStorage.setItem('restaurantMenuWithImages', JSON.stringify(menuData));
+                renderMenu();
+            }
+        }
+
+        renderMenu();
+    </script>
+</body>
+</html>
